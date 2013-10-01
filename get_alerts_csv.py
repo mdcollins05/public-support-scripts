@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-# Nagios/Icinga plugin that sends Nagios/Icinga events to PagerDuty.
 #
 # Copyright (c) 2011-2012, PagerDuty, Inc. <info@pagerduty.com>
 # All rights reserved.
