@@ -83,8 +83,7 @@ def get_details_by_incident(since, until):
                     elif ea_entry.get('assigned_user'):
                         fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['assigned_user']['name'], 'N.A.', ea_entry['channel']['type']]).replace('\n','') + ',N.A.,N.A.\n')
             else:
-                fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['user']['name'], ea_entry['notification']['type']]).replace('\n','') + ',N.A.,N.A.,N.A.\n')
-                
+                fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['user']['name'], ea_entry['notification']['type']]).replace('\n','') + ',N.A.,N.A.,N.A.\n')                
     fin_file.close()
 
 
