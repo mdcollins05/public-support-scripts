@@ -5,15 +5,14 @@ import sys
 
 def get_incident_count(since, until, headers):
     payload = {'since': since, 'until': until}
-    get_incident_count_url = 'https://pdt-dank.pagerduty.com/api/v1/incidents/count'
+    get_incident_count_url = 'https://mysubdomain.pagerduty.com/api/v1/incidents/count'
     r = requests.get(get_incident_count_url, params=payload, headers=headers)
     return int(r.json()['total'])
 
 def get_incident_ids(since, until, headers):
-    #id_str = ''
     id_list = []
     count = get_incident_count(since, until, headers)
-    get_incident_ids_url = 'https://pdt-dank.pagerduty.com/api/v1/incidents'
+    get_incident_ids_url = 'https://mysubdomain.pagerduty.com/api/v1/incidents'
     payload = {'since': since, 'until': until}
     for ea_hun in xrange(0,count):
         if int(ea_hun)%100==1:
@@ -24,14 +23,14 @@ def get_incident_ids(since, until, headers):
 
 def get_details_by_incident(since, until):
     headers = {
-        'Authorization': 'Token token=rcz1JzsqjcKhbEgXgY4z',
+        'Authorization': 'Token token=MY_API_ACCESS_KEY',
         'Content-type': 'application/json',
     }
     id_list = get_incident_ids(since, until, headers)
     fin_file = open('incident_report_{0}_to_{1}_details.csv'.format(since, until), 'w')
     fin_file.write('IncidentID,Created-At,Type,Agent/User,NotificationType,ChannelType,Subject,Summary\n')
     for ea_id in id_list:
-        r = requests.get('https://pdt-dank.pagerduty.com/api/v1/incidents/{0}/log_entries?include[]=channel'.format(ea_id), headers=headers, stream=True)
+        r = requests.get('https://mysubdomain.pagerduty.com/api/v1/incidents/{0}/log_entries?include[]=channel'.format(ea_id), headers=headers, stream=True)
         for ea_entry in reversed(r.json()['log_entries']):
             if ea_entry['type'] != 'notify':
                 if ea_entry['channel']['type'] not in ['auto','timeout','website','note'] and ea_entry['channel'].get('subject'):
