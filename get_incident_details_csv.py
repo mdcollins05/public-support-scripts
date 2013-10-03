@@ -41,7 +41,7 @@ def get_incident_count(since, until, headers):
 def get_incident_ids(since, until, headers):
     """
         Based on an incident-count used to create an 'offset',
-        retrieve incident-IDs, in batches-of-100.
+        retrieve incident-IDs, in batches-of-100, and return as a list.
         Dates should be in the format 'YYYY-MM-DD'.
     """
     id_list = []
