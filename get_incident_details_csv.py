@@ -29,12 +29,21 @@ import requests
 import sys
 
 def get_incident_count(since, until, headers):
+    """
+        Retrieve the count of incidents in a given time-period, as an 'int'.
+        Dates should be in the format 'YYYY-MM-DD'.
+    """
     payload = {'since': since, 'until': until}
     get_incident_count_url = 'https://mysubdomain.pagerduty.com/api/v1/incidents/count'
     r = requests.get(get_incident_count_url, params=payload, headers=headers)
     return int(r.json()['total'])
 
 def get_incident_ids(since, until, headers):
+    """
+        Based on an incident-count used to create an 'offset',
+        retrieve incident-IDs, in batches-of-100.
+        Dates should be in the format 'YYYY-MM-DD'.
+    """
     id_list = []
     count = get_incident_count(since, until, headers)
     get_incident_ids_url = 'https://mysubdomain.pagerduty.com/api/v1/incidents'
@@ -47,6 +56,11 @@ def get_incident_ids(since, until, headers):
     return id_list
 
 def get_details_by_incident(since, until):
+    """
+        Based on a list of incident-IDs, retrieve incident details.
+        Process json-payload and output to CSV file.
+        CLI Usage (Linux example): "./get_incident_details_csv.py 2011-10-01 2011-10-04".
+    """
     headers = {
         'Authorization': 'Token token=MY_API_ACCESS_KEY',
         'Content-type': 'application/json',
