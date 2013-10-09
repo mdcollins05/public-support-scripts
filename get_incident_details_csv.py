@@ -78,7 +78,7 @@ def get_details_by_incident(since, until):
                 if ea_entry['channel']['type']=='api':
                     fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['description'])]) + '\n')
                 if ea_entry['channel']['type']=='web_trigger':
-                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary']), '"{0}"'.format(ea_entry['channel']['details']).replace('\n','')]) + '\n')
+                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary'])]) + '\n')
                 if ea_entry['channel']['type']=='email':
                     fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary'])]) + '\n')
             else:
