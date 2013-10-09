@@ -48,7 +48,7 @@ def get_incident_ids(since, until, headers):
     count = get_incident_count(since, until, headers)
     get_incident_ids_url = 'https://mysubdomain.pagerduty.com/api/v1/incidents'
     payload = {'since': since, 'until': until}
-    for ea_hun in xrange(0,count):
+    for ea_hun in xrange(0,count) or int(ea_hun)==count:
         if int(ea_hun)%100==1:
             payload['offset'] = ea_hun
             r = requests.get(get_incident_ids_url, params=payload, headers=headers, stream=True)
@@ -67,23 +67,22 @@ def get_details_by_incident(since, until):
     }
     id_list = get_incident_ids(since, until, headers)
     fin_file = open('incident_report_{0}_to_{1}_details.csv'.format(since, until), 'w')
-    fin_file.write('IncidentID,Created-At,Type,Agent/User,NotificationType,ChannelType,Subject,Summary\n')
+    fin_file.write('IncidentID,Created-At,Type,Agent/User,NotificationType,ChannelType,Summary\n')
     for ea_id in id_list:
         r = requests.get('https://mysubdomain.pagerduty.com/api/v1/incidents/{0}/log_entries?include[]=channel'.format(ea_id), headers=headers, stream=True)
+        test_file.write(str(r.json()))
         for ea_entry in reversed(r.json()['log_entries']):
             if ea_entry['type'] != 'notify':
-                if ea_entry['channel']['type'] not in ['auto','timeout','website','note'] and ea_entry['channel'].get('subject'):
-                    if ea_entry.get('agent') and ea_entry['agent'].get('name'):
-                        fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['agent']['name'], 'N.A', ea_entry['channel']['type'], '"' + ea_entry['channel']['subject'] + '"', '"' + ea_entry['channel']['details'] + '"']).replace('\n','') + '\n')
-                    elif ea_entry.get('assigned_user'):
-                        fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['assigned_user']['name'], 'N.A.', ea_entry['channel']['type'], '"' + ea_entry['channel']['subject'] + '"', '"' + ea_entry['channel']['details'] + '"']).replace('\n','') + '\n')
-                else:
-                    if ea_entry.get('agent') and ea_entry['agent'].get('name'):
-                        fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['agent']['name'], 'N.A', ea_entry['channel']['type']]).replace('\n','') + ',N.A.,N.A.\n')
-                    elif ea_entry.get('assigned_user'):
-                        fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['assigned_user']['name'], 'N.A.', ea_entry['channel']['type']]).replace('\n','') + ',N.A.,N.A.\n')
+                if ea_entry['channel']['type']=='nagios':
+                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary'])]) + '\n')
+                if ea_entry['channel']['type']=='api':
+                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['description'])]) + '\n')
+                if ea_entry['channel']['type']=='web_trigger':
+                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary']), '"{0}"'.format(ea_entry['channel']['details']).replace('\n','')]) + '\n')
+                if ea_entry['channel']['type']=='email':
+                    fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], 'N.A.,N.A.', ea_entry['channel']['type'], '"{0}"'.format(ea_entry['channel']['summary'])]) + '\n')
             else:
-                fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['user']['name'], ea_entry['notification']['type']]).replace('\n','') + ',N.A.,N.A.,N.A.\n')                
+                fin_file.write(','.join([ea_id, ea_entry['created_at'], ea_entry['type'], ea_entry['user']['name'], ea_entry['notification']['type']]).replace('\n','') + ',N.A,N.A.\n')
     fin_file.close()
 
 
