@@ -55,7 +55,6 @@ def get_log_entries_by_incident(since, until):
     fin_file.write('IncidentID,Created-At,Type,Agent/User,NotificationType,ChannelType,Notes\n')
     for ea_id in id_list:
         r1 = requests.get('https://mysubdomain.pagerduty.com/api/v1/incidents/{0}/log_entries?include[]=channel'.format(ea_id), headers=headers, stream=True)
-        details=''
         for ea_entry in reversed(r1.json()['log_entries']):
             if ea_entry['type'] == 'trigger':
                 try:
