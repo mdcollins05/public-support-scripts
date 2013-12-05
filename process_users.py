@@ -32,6 +32,18 @@ import requests
 
 
 def process_users():
+    """
+    A sample script to programatically access the PD alerts csv-page behind the login, via a single-session.
+    EXAMPLE CLI USAGE (for Linux/OSX): './process_users.py'
+    FILE CALLED 'users.csv' must exist in the same directory as the process_users.py file.
+    REQUIRED FORMAT FOR 'users.csv':
+    
+    name,email,role,address,type
+    Joe User,ju@example.com,user,15555555555,phone
+    Bob Dobbs,bd@example.com,admin,15555555554,sms
+    
+    NOTE: Currently, the subdomain and the 'API Access Key' are hard-coded in the script.
+    """
     url = 'https://mysubdomain.pagerduty.com/api/v1/users'
     headers = {'Authorization': 'Token token=MYSECRETKEY','content-type': 'application/json',}
     reader=csv.DictReader(open('users.csv','r'), fieldnames=('name','email','role','address','type'))
