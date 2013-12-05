@@ -33,7 +33,7 @@ import requests
 
 def process_users():
     """
-    A sample script to programatically access the PD alerts csv-page behind the login, via a single-session.
+    A sample script to upload users, an additional contact-method alongside email from a CSV-file, and to create a notification-rule for the second contact method via the API.
     EXAMPLE CLI USAGE (for Linux/OSX): './process_users.py'
     FILE CALLED 'users.csv' must exist in the same directory as the process_users.py file.
     REQUIRED FORMAT FOR 'users.csv':
