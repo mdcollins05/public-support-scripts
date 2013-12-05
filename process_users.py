@@ -31,7 +31,7 @@ import json
 import requests
 
 
-def process():
+def process_users():
     """
     A sample script to upload users, an additional contact-method alongside email from a CSV-file, and to create a notification-rule for the second contact method via the API.
     EXAMPLE CLI USAGE (for Linux/OSX): './process_users.py'
@@ -85,4 +85,4 @@ def process():
 
 
 if __name__ == '__main__':
-    process()
+    process_users()
