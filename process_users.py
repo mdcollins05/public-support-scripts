@@ -32,6 +32,18 @@ import requests
 
 
 def process():
+    """
+    A sample script to upload users, an additional contact-method alongside email from a CSV-file, and to create a notification-rule for the second contact method via the API.
+    EXAMPLE CLI USAGE (for Linux/OSX): './process_users.py'
+    FILE CALLED 'users.csv' must exist in the same directory as the process_users.py file.
+    REQUIRED FORMAT FOR 'users.csv':
+    
+    name,email,role,address,type
+    Joe User,ju@example.com,user,15555555555,phone
+    Bob Dobbs,bd@example.com,admin,15555555554,sms
+    
+    NOTE: Currently, the subdomain, requester_id and the 'API Access Key' are hard-coded in the script.
+    """
     url = 'https://mysubdomain.pagerduty.com/api/v1/users'
     headers = {'Authorization': 'Token token=MYSECRETKEY','content-type': 'application/json',}
     reader=csv.DictReader(open('users.csv','r'), fieldnames=('name','email','role','address','type'))
@@ -43,7 +55,7 @@ def process():
         row.pop('address')
         row.pop('type')
         myjson = json.dumps(row)
-        myjson = myjson.replace('}',', "requester_id":"PJR28TQ",}')
+        myjson = myjson.replace('}',', "requester_id":"MYREQUESTERID",}')
         r = requests.post(url, data=myjson, headers=headers)
         response_dict = collections.OrderedDict(r.json())
         user_id_list.append(response_dict[u'user'][u'id'])
