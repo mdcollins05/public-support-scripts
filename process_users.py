@@ -31,23 +31,11 @@ import json
 import requests
 
 
-def process_users():
-    """
-    A sample script to upload users, an additional contact-method alongside email from a CSV-file, and to create a notification-rule for the second contact method via the API.
-    EXAMPLE CLI USAGE (for Linux/OSX): './process_users.py'
-    FILE CALLED 'users.csv' must exist in the same directory as the process_users.py file.
-    REQUIRED FORMAT FOR 'users.csv':
-    
-    name,email,role,address,type
-    Joe User,ju@example.com,user,15555555555,phone
-    Bob Dobbs,bd@example.com,admin,15555555554,sms
-    
-    NOTE: Currently, the subdomain and the 'API Access Key' are hard-coded in the script.
-    """
+def process():
     url = 'https://mysubdomain.pagerduty.com/api/v1/users'
     headers = {'Authorization': 'Token token=MYSECRETKEY','content-type': 'application/json',}
     reader=csv.DictReader(open('users.csv','r'), fieldnames=('name','email','role','address','type'))
-    phone_reader=csv.DictReader(open('users.csv','r'), fieldnames=('name','email','role','address','$
+    phone_reader=csv.DictReader(open('users.csv','r'), fieldnames=('name','email','role','address','type'))
     reader.next()
     phone_reader.next()
     user_id_list = []
@@ -62,8 +50,8 @@ def process_users():
     contact_urls = []
     notification_rule_list = []
     for id in user_id_list:
-            contact_urls.append('https://mysubdomain.pagerduty.com/api/v1/users/{0}/contact_methods'$
-            notification_rule_list.append('https://mysubdomain.pagerduty.com/api/v1/users/{0}/notifi$
+	    contact_urls.append('https://mysubdomain.pagerduty.com/api/v1/users/{0}/contact_methods'.format(str(id)))
+	    notification_rule_list.append('https://mysubdomain.pagerduty.com/api/v1/users/{0}/notification_rules'.format(str(id)))
     i=0
     contact_method_list = []
     for row2 in phone_reader:
@@ -78,11 +66,11 @@ def process_users():
         contact_method_list.append(res_dict2[u'contact_method'][u'id'])
     j=0
     for ea_id in contact_method_list:
-        dct = {'notification_rule': {'contact_method_id': "{0}".format(ea_id), 'start_delay_in_minut$
+        dct = {'notification_rule': {'contact_method_id': "{0}".format(ea_id), 'start_delay_in_minutes': 0}}
         jj = json.dumps(dct)
         rq = requests.post(notification_rule_list[j], data=jj, headers=headers)
         j+=1
 
 
 if __name__ == '__main__':
-    process_users()
+    process()
