@@ -11,7 +11,7 @@ endpoint="https://#{subdomain}.pagerduty.com/api/v1/log_entries/#{id}"
 
 def curl_command_string(tokennum,endpoint)
     curl_command="curl -H \"Content-type: application/json\" -H \"Authorization: Token token=#{tokennum}\" -X GET -G \
-    --data-urlencode \"include[]=channel\" --data-urlencode \"time_zone=\"Lima\"\" \
+    --data-urlencode \"include[]=channel\" --data-urlencode \"time_zone=Lima\" \
     \"#{endpoint}\""
 end
 
