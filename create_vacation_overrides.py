@@ -6,7 +6,7 @@ import sys
 
 def get_all_schedule_ids(headers):
     r = requests.get('https://MYSUBDOMAIN.pagerduty.com/api/v1/schedules', headers=headers)
-    return [id['id'] for id in r.json()['schedules']]
+    return [each_id['id'] for each_id in r.json()['schedules']]
 
 
 def get_user_id_by_name(headers, name):
