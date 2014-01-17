@@ -12,7 +12,9 @@ def get_all_schedule_ids(headers):
 def get_user_id_by_name(headers, name):
     final = False
     params = {'query': name}
-    r = requests.get('https://MYSUBDOMAIN.pagerduty.com/api/v1/users', params=params, headers=headers)
+    r = requests.get('https://MYSUBDOMAIN.pagerduty.com/api/v1/users', 
+                    params=params,
+                    headers=headers)
     if not r.json()['users']:
         print 'no users found by the name: {0}'.format(name)
     elif len(r.json()['users']) > 1:
