@@ -40,6 +40,14 @@ def get_all_schedule_ids_which_user_is_in(headers, *args):
 
 
 def create_overrides(*args):
+    """
+        Example CLI-usage on OSX/Linux:
+        './create_vacation_overrides.py "Vacationing User's Exact Full Name" "Overriding User's Exact Full Name" "vacation-start-date" "vacation-end-date"'
+        e.g.:
+        './create_vacation_overrides.py "Joe Vaca" "Bob Over" "2014-01-09" "2099-01-01"'
+        NAMES MUST BE IN QUOTES
+        QUOTES ARE OPTIONAL FOR DATES
+    """
     headers = {
         'Authorization': 'Token token=MY_API_ACCESS_KEY',
         'Content-type': 'application/json',
