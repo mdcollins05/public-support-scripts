@@ -24,7 +24,7 @@ def get_user_id_by_name(headers, name):
     return final
 
 
-def get_all_schedule_ids_which_user_is_in(headers, *args):
+def get_all_schedule_ids_which_vacationing_user_is_in(headers, *args):
     vacationing_user_id = get_user_id_by_name(headers, args[0])
     overriding_user_id = get_user_id_by_name(headers, args[1])
     if not vacationing_user_id or not overriding_user_id:
@@ -53,7 +53,7 @@ def create_overrides(*args):
         'Content-type': 'application/json',
     }
     cli_params = {"since": args[2], "until": args[3]}
-    all_sched_data = get_all_schedule_ids_which_user_is_in(headers, args[0], args[1], cli_params)
+    all_sched_data = get_all_schedule_ids_which_vacationing_user_is_in(headers, args[0], args[1], cli_params)
     for each_sched in all_sched_data[0]:
         for each_date_pair in all_sched_data[0][each_sched]:
             params = {
