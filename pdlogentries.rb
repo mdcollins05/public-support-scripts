@@ -9,8 +9,7 @@ id="PIEJWCE"
 endpoint="https://#{subdomain}.pagerduty.com/api/v1/incidents/#{id}/log_entries"
 
 def curl_command_string(tokennum,endpoint)
-    curl_command="curl -H \"Content-type: application/json\" -H \"Authorization: Token token=#{tokennum}\" -X GET -G \
-    \"#{endpoint}\""
+  curl_command='curl -H "Content-type: application/json" -H "Authorization: Token token='+tokennum+'" -X GET -G "'+endpoint+'"'
 end
 
 def print_results(curl_get_all)
