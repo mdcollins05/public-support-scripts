@@ -4,7 +4,7 @@ subdomain="change_this"
 service_id="change_this"
 api_key="change_this"
 
-id="PIEJWCE"
+id="change_this"
 
 endpoint="https://#{subdomain}.pagerduty.com/api/v1/incidents/#{id}/log_entries"
 
