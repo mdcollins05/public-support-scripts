@@ -46,10 +46,10 @@ def print_results_to_file(curl_get_all,filename)
   IO.popen(curl_get_all).each do |line|
     parsed=JSON.parse(line)
     puts parsed
-    #parsed["incidents"].each do |hash| 
-    #  hash.each_pair {|key,value| file.puts "#{key},#{value}"}
-    #  file.puts
-    #end
+    parsed["incidents"].each do |hash| 
+      hash.each_pair {|key,value| file.puts "#{key},#{value}"}
+      file.puts
+    end
   end
   file.close
 end
