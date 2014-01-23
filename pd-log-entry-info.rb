@@ -1,5 +1,3 @@
-# Python script to create events using the API.
-#
 # Copyright (c) 2014, PagerDuty, Inc. <info@pagerduty.com>
 # All rights reserved.
 #
