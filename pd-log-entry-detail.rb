@@ -50,9 +50,6 @@ def print_results(curl_get_all)
     
     channel=log["channel"]
     puts channel
-    linesstring= channel["body"]
-    lines=linesstring.split("\n")
-    lines.each {|line| puts line}
   end
 end
 
@@ -60,4 +57,3 @@ curl_one=curl_command_string(api_key,endpoint)
 puts curl_one
 print_results(curl_one)
 
-puts ENV['TZ']
