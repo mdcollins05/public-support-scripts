@@ -30,7 +30,7 @@ subdomain="change_this"
 service_id="change_this"
 api_key="change_this"
 
-id="PUF0J5S"
+id="change_this"
 
 endpoint="https://#{subdomain}.pagerduty.com/api/v1/log_entries/#{id}"
 
