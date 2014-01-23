@@ -12,11 +12,11 @@ stop="2013-05-01"
 endpoint="https://#{subdomain}.pagerduty.com/api/v1/incidents/"
 
 def curl_command_string(tokennum,start,stop,endpoint,service_number)
-    curl_command="curl -H \"Content-type: application/json\" -H \"Authorization: Token token=#{tokennum}\" -X GET -G \
-    --data-urlencode \"since=#{start}\" \
-    --data-urlencode \"until=#{stop}\" \
-    --data-urlencode \"service=#{service_number}\" \
-    \"#{endpoint}\""
+    curl_command='curl -H "Content-type: application/json" -H "Authorization: Token token='+tokennum+'" -X GET -G \
+    --data-urlencode "since='+start+'" \
+    --data-urlencode "until='+stop+'" \
+    --data-urlencode "service='+service_number+'" \
+    "'+endpoint+'"'
 end
 
 def print_results_to_file(curl_get_all,filename)
