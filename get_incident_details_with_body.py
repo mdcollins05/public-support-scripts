@@ -6,31 +6,48 @@ import json
 from datetime import date, timedelta
 
 #Your PagerDuty API key.  A read-only key will work for this.
-AUTH_TOKEN = 'YQstXoCv5Jsib56A6zeu'
+AUTH_TOKEN = 'YOUR_API_KEY'
 #The API base url, make sure to include the subdomain
-BASE_URL = 'https://pdt-ryan.pagerduty.com/api/v1'
+BASE_URL = 'https://YOUR_SUBDOMAIN.pagerduty.com/api/v1'
 #The service ID that you would like to query.  You can leave this blank to query all services.
 service_id = ""
 #The start date that you would like to search.  It's currently setup to start yesterday.
-yesterday = date.today() - timedelta(1)
-since = yesterday.strftime('%Y-%m-%d')
+#yesterday = date.today() - timedelta(1)
+since = '2014-09-01'
 #The end date that you would like to search.
-until = date.today().strftime('%Y-%m-%d')
+until = '2014-09-15'
 
 HEADERS = {
     'Authorization': 'Token token={0}'.format(AUTH_TOKEN),
     'Content-type': 'application/json',
 }
 
-def get_incidents(since, until, service_id=None):
-    print "since",since
-    print "until",until
-    file_name = 'pagerduty_export'
-
+def get_incident_count(since,until,service_id=None):
+    global incident_count
+ 
     params = {
         'service':service_id,
         'since':since,
         'until':until
+    }
+    print '{0}/incidents/count'.format(BASE_URL)
+    count = requests.get(
+        '{0}/incidents/count'.format(BASE_URL),
+        headers=HEADERS,
+        data=json.dumps(params)
+    )
+    incident_count = count.json()['total']
+
+def get_incidents(since, until, offset, service_id=None):
+    print "offset:" + str(offset)
+    file_name = 'pagerduty_export'
+    output = ""
+ 
+    params = {
+        'service':service_id,
+        'since':since,
+        'until':until,
+        'offset':offset
     }
 
     all_incidents = requests.get(
@@ -39,10 +56,8 @@ def get_incidents(since, until, service_id=None):
         data=json.dumps(params)
     )
 
-    print "Exporting incident data to " + file_name + since
     for incident in all_incidents.json()['incidents']:
         get_incident_details(incident["id"], str(incident["incident_number"]), incident["service"]["name"], file_name+since+".csv")
-    print "Exporting has completed successfully."
 
 def get_incident_details(incident_id, incident_number, service, file_name):
     start_time = ""
@@ -85,7 +100,20 @@ def get_incident_details(incident_id, incident_number, service, file_name):
     if (has_body):
         output += ",\"" + str(body) + "\""
     output += "\n"
-    print output
     f.write(output)
 
-get_incidents(since = since, until = until, service_id = service_id)
+def get_incident_stats(since,until,service_id=None):
+    get_incident_count(since,until,service_id)
+    print "Number of incidents: ", incident_count
+    for offset in xrange(0,incident_count):
+        if offset % 100 == 0:
+            get_incidents(since, until, offset, service_id)
+    print "Exporting has completed successfully."
+ 
+def main(argv=None):
+  if argv is None:
+    argv = sys.argv
+  get_incident_stats(since,until,"")
+ 
+if __name__=='__main__':
+  sys.exit(main())
