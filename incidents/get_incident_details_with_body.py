@@ -94,11 +94,11 @@ def get_incident_details(incident_id, incident_number, service, file_name):
     output += start_time + ","
     output += end_time
     if (has_summary):
-        output += ",\"" + summary + "\""
+        output += ",\"" + summary.encode('ascii', 'ignore') + "\""
     if (has_details):
-        output += ",\"" + str(details) + "\""
+        output += ",\"" + str(details).encode('ascii', 'ignore') + "\""
     if (has_body):
-        output += ",\"" + str(body) + "\""
+        output += ",\"" + str(body).encode('ascii', 'ignore') + "\""
     output += "\n"
     f.write(output)
 
