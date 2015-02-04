@@ -94,13 +94,13 @@ def get_incident_details(incident_id, incident_number, service, file_name):
     output += start_time + ","
     output += end_time
     if (has_summary):
-        output += ",\"" + summary.encode('ascii', 'ignore') + "\""
+        output += ",\"" + convert_to_ascii(summary) + "\""
     if (has_details):
-        output += ",\"" + str(details).encode('ascii', 'ignore') + "\""
+        output += ",\"" + str(convert_to_ascii(details)) + "\""
     if (has_body):
-        output += ",\"" + str(body).encode('ascii', 'ignore') + "\""
+        output += ",\"" + str(convert_to_ascii(body)) + "\""
     output += "\n"
-    f.write(output)
+    f.write(output.encode('utf-8'))
 
 def get_incident_stats(since,until,service_id=None):
     get_incident_count(since,until,service_id)
@@ -109,6 +109,16 @@ def get_incident_stats(since,until,service_id=None):
         if offset % 100 == 0:
             get_incidents(since, until, offset, service_id)
     print "Exporting has completed successfully."
+
+def convert_to_ascii(input):
+    if isinstance(input, dict):
+        return {convert_to_ascii(key): convert_to_ascii(value) for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [convert_to_ascii(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('ascii', 'ignore')
+    else:
+        return input
  
 def main(argv=None):
   if argv is None:
