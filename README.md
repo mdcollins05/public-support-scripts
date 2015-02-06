@@ -26,7 +26,7 @@ Given a valid date-range, output incident-details to CSV in the format:  Inciden
 
 `incidents/get_incident_details_with_body.py`
 
-Author: 
+Author: ryanhoskin [(Source)](https://gist.github.com/ryanhoskin/b9c305274627c783f0d7)
 
 Outputs incident details with the body included in the format: 
 
